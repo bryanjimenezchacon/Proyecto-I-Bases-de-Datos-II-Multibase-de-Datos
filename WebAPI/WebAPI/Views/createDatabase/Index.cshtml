@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "Create Database";
+}
+
+<h2>Crear nueva MongoBD</h2>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="~/Scripts/jquery-2.2.2.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.serializejson.js"></script>
+
+
+    <script type="text/javascript">
+
+            $(document).ready(function () {
+
+
+                    /*
+                    $form: jquery object del form
+                    */
+
+
+                    $("#GuardarConexion").click(function (e) {
+
+                        e.preventDefault(); //Prevent the normal submission action
+
+                        var data = $("#DatosBase").serialize().split("&");
+                        console.log(data);
+                        var obj = {};
+                        for (var key in data) {
+                            console.log(data[key]);
+                            obj[data[key].split("=")[0]] = data[key].split("=")[1];
+                        }
+
+                        console.log(obj);
+                        var datos = JSON.stringify(obj)
+                        console.log(datos);
+
+                        $.ajax({
+
+                            url: "/createDatabase/Create",
+                            type: 'POST',
+                            data: datos,
+                            contentType: "application/json; charset=utf-8",
+                            datatype: "json",
+                            error: function (response) {
+                                alert(response.responseText);
+
+                            },
+                            success: function (response) {
+                                alert(response);
+                                if (response == "Database successfully connected") {
+                                    var pagina = "http://localhost:57111/createDatabase"
+                                    location.href = pagina
+
+                                }
+                            }
+                        });
+
+                    });
+                });
+        
+    </script>
+</head>
+<body style="font-family:Arial; font-size:10pt">
+    <form id="DatosBase" name="DatosBase">
+        <p>
+            <input id="database_name" name="database_name" type="text" placeholder="Nombre para la nueva BD" />
+        </p>
+        <p>
+            <input id="GuardarConexion" name="GuardarConexion" type="button" value="Crear base de Datos" />
+        </p>
+    </form>
+</body>
+</html>
