@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="Scripts/jquery-2.2.3.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="Scripts/jquery.serializejson.js"></script>
+    <script src="scripts/jquery.serializejson.min.js"></script>
+
+    <script type="text/javascript">
+
+            $(document).ready(function () {
+                $("#GuardarConexion").click(function (e) {
+                    var MyForm = $("#DatosBase").serializeJSON();
+
+                    var obj = {
+                        name: 'myObj'
+                    };
+                    var datos = JSON.stringify(MyForm)
+                    console.log(MyForm);
+                    alert(datos);
+                    $.ajax(
+                    {
+                        url: "submit.php",
+                        type: "POST",
+                        data: { valArray: MyForm },
+                        success: function (maindta) {
+
+                            alert(maindta);
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                        }
+                    });
+                    e.preventDefault(); //STOP default action
+
+                });
+            });
+
+        function getBases() {
+            $(document).ready(function () {
+
+
+                    /*
+                    $form: jquery object del form
+                    */
+
+
+                    $("#GuardarConexion").click(function (e) {
+
+                        e.preventDefault(); //Prevent the normal submission action
+
+                        var frm = $("#User");
+                        var dataa = JSON.stringify(frm.serializeJSON());
+                        console.log(dataa);
+                        alert(dataa);
+
+
+                        $.ajax({
+
+                            url: "/ServerConnection/CreateServerConnection",
+                            type: 'POST',
+                            data: dataa,
+                            contentType: "application/json; charset=utf-8",
+                            datatype: "json",
+                            error: function (response) {
+                                alert(response.responseText);
+
+                            },
+                            success: function (response) {
+                                alert(response);
+                                if (response == "Database successfully connected") {
+                                    var pagina = "http://localhost:3531/Database/Index"
+                                    location.href = pagina
+
+                                }
+                            }
+                        });
+
+                    });
+                });
+        }
+    </script>
+</head>
+<body style="font-family:Arial; font-size:10pt">
+    <form id="DatosBase" name="DatosBase">
+        <p>
+            <select name="TipoDB" id="TipoDB">
+                <option value="MariaDB">MariaDB</option>
+                <option value="MongoDB">MongoDB</option>
+                <option value="SQLServer">SQLServer</option>
+            </select>
+
+        </p>
+        <p>
+            <input id="User" name="User" type="text" placeholder="Usuario" />
+        </p>
+        <p>
+            <input name="Pass" id="Pass" type="text" placeholder="Password" />
+        </p>
+        <p>
+            <input name="Servidor" id="Servidor" type="text" placeholder="Server" />
+        </p>
+        <p>
+            <input name="Alias" id="Alias" type="text" placeholder="Alias" />
+        </p>
+        <p>
+
+            <input name="Port" id="Port" type="text" placeholder="Port" />
+        </p>
+        <p>
+            <input name="Nombre" id="Nombre" type="text" placeholder="Nombre" />
+        </p>
+        <p>
+            <input id="GuardarConexion" name="GuardarConexion" type="button" value="Guardar Datos" />
+        </p>
+    </form>
+</body>
+</html>

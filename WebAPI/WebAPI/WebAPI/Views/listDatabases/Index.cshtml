@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>List Databases</h2>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="~/Scripts/jquery-2.2.2.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.serializejson.js"></script>
+
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $("#GuardarConexion").click(function (e) {
+            $("#bases tr").remove();//limpia la tabla
+            $.ajax({
+
+                type: 'POST',
+
+                url: "/listDatabases/GetProducts",
+                dataType: 'json',
+                data: {},
+                success: function (data) {
+                    var items = '';
+                    $.each(data, function (i, item) {
+                       // <input name="server" id="server" type="text" placeholder="Server" />
+                        var rows = "<tr>"
+                        + "<td class='prtoducttd'>" + item.database_type + "</td>"
+                        + "<td class='prtoducttd'>" + item.alias + "</td>"
+
+                        + "</tr>";
+                        console.log(rows);
+                        $('#bases').append(rows);
+                    });
+
+
+                },
+                error: function (ex) {
+                    var r = jQuery.parseJSON(response.responseText);
+                    alert("Message: " + r.Message);
+                    alert("StackTrace: " + r.StackTrace);
+                    alert("ExceptionType: " + r.ExceptionType);
+                }
+            });
+
+            return false;
+        });
+        });
+
+
+        /*$(document).ready(function () {
+
+
+            $("#GuardarConexion").click(function (e) {
+
+                e.preventDefault(); //Prevent the normal submission action
+
+                $.ajax({
+                    type: "GET",
+                    dataType: "jsonp",
+                    url: "/listDatabases",
+                    success: function (data) {
+                        alert(data);
+                    }
+                });
+
+            });
+        });*/
+    </script>
+</head>
+
+<body style="font-family:Arial; font-size:10pt">
+    <h2>Bases de Datos</h2>
+    <table>
+        <thead>
+            <tr><th>Tipo</th> <th>Alias</th></tr>
+        </thead>
+        <tbody id="bases"></tbody>
+    </table>
+    <form id="DatosBase" name="DatosBase">
+        <p>
+            <input id="GuardarConexion" name="GuardarConexion" type="button" value="Listar BDS" />
+
+        </p>
+    </form>
+</body>
+</html>

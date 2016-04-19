@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication3.Conexiones;
 
 namespace WebAPI.Controllers
 {
@@ -28,11 +29,15 @@ namespace WebAPI.Controllers
 
         // POST: createTable/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(WebApplication3.Models.createTable collection)
         {
             try
             {
                 // TODO: Add insert logic here
+                ConexionMariaDBMeta conMeta = new ConexionMariaDBMeta();
+                ConexionMongoDB conMongo = new ConexionMongoDB();
+                ConexionMariaDB conMaria = new ConexionMariaDB();
+                ConexionSQLServer conServer = new ConexionSQLServer();
 
                 return RedirectToAction("Index");
             }
